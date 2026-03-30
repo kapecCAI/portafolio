@@ -1137,6 +1137,12 @@ const _initCl=clients.find(c=>c.id===activeClientId);
 if(_initCl) document.getElementById('active-client-name').textContent=_initCl.name;
 render();
 fetchAll();
+// Auto-refresh cada 15 minutos
+setInterval(()=>{
+  const now=new Date();
+  // Solo en horario de mercado AR (lun-vie 11-17hs ART) o siempre si querés
+  fetchAll();
+}, 15 * 60 * 1000);
 </script>
 <!-- BENCHMARK MODAL -->
 <div class="modal-overlay" id="bm-modal" style="display:none">
