@@ -505,17 +505,10 @@ const CAT={
 // ══════════════════════════════════════════
 const CLIENT_COLORS=['#3b82f6','#10b981','#f59e0b','#a78bfa','#fb7185','#38bdf8'];
 
+// Cartera vacía por defecto — los datos vienen de localStorage
 let clients=[{
   id:'me', name:'Mi Portafolio', desc:'Cartera personal', color:'#3b82f6',
-  holdings:[
-    {id:1,ticker:"AAPL", qty:50, avgCost:11500, entryDate:'01/01/2025'},
-    {id:2,ticker:"MELI", qty:8,  avgCost:75000, entryDate:'01/01/2025'},
-    {id:3,ticker:"GGAL", qty:300,avgCost:1950,  entryDate:'01/01/2025'},
-    {id:4,ticker:"NVDA", qty:20, avgCost:13800, entryDate:'01/01/2025'},
-    {id:5,ticker:"YPF",  qty:200,avgCost:21500, entryDate:'01/01/2025'},
-  ],
-  cash:{ars:0,usd:0},
-  closedTrades:[]
+  holdings:[], cash:{ars:0,usd:0}, closedTrades:[]
 }];
 
 let activeClientId='me';
@@ -1118,12 +1111,12 @@ function render(){
 // ── PERSISTENCIA localStorage ──────────────────────────
 function saveData(){
   try{
-    localStorage.setItem('portfolio_ar_v2', JSON.stringify({clients, activeClientId}));
+    localStorage.setItem('portfolio_ar_v3', JSON.stringify({clients, activeClientId, nextId}));
   }catch(e){ console.warn('save error',e); }
 }
 function loadData(){
   try{
-    const raw=localStorage.getItem('portfolio_ar_v2');
+    const raw=localStorage.getItem('portfolio_ar_v3');
     if(!raw) return;
     const d=JSON.parse(raw);
     if(d.clients&&d.clients.length>0){
@@ -1134,6 +1127,7 @@ function loadData(){
       });
     }
     if(d.activeClientId) activeClientId=d.activeClientId;
+    if(d.nextId && d.nextId>nextId) nextId=d.nextId;
   }catch(e){ console.warn('load error',e); }
 }
 
